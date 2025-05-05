@@ -8,7 +8,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/email", emailRoutes);
+// Health check for root path
+app.get("/", async (req, res) => {
+    let dbConnected = false;
+    try {
+        // If mongoose is connected, readyState === 1
+        dbConnected = mongoose.connection.readyState === 1;
+    } catch (err) {
+        dbConnected = false;
+    }
+    if (dbConnected) {
+        res.status(200).json({ message: "Server is up and running. DB is connected." });
+    } else {
+        res.status(500).json({ message: "Server is up but DB is not connected." });
+    }
+});
+
+// Mount email routes
+app.use("/api/email", (req,res)=>{
+    res.status(200).json({message:"Email service is running"});
+});
 
 app.get("/health", async (req, res) => {
     const mongoState = mongoose.connection.readyState;
