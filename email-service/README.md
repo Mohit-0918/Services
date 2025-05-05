@@ -1,112 +1,117 @@
-### Microservices Architecture Skeleton
+# Email Service
+
+This microservice handles email sending functionality for the microservices architecture. It exposes a REST API to send emails and includes authentication using JWT.
+
+## Features
+
+- Send emails using Gmail via Nodemailer.
+- JWT-based authentication for secure email sending.
+- Health check endpoint.
+- Docker-ready and supports environment-based configuration.
+- MongoDB connection for logging or future enhancements.
+
+## Folder Structure
 
 ```
-/microservices-architecture
+/email-service
 │
-├── /services
-│   ├── /email-service
-│   │   ├── /src
-│   │   │   ├── /controllers
-│   │   │   ├── /models
-│   │   │   ├── /routes
-│   │   │   ├── /services
-│   │   │   ├── /utils
-│   │   │   └── index.js
-│   │   ├── /tests
-│   │   ├── Dockerfile
-│   │   ├── package.json
-│   │   └── README.md
-│   │
-│   ├── /user-service
-│   │   ├── /src
-│   │   │   ├── /controllers
-│   │   │   ├── /models
-│   │   │   ├── /routes
-│   │   │   ├── /services
-│   │   │   ├── /utils
-│   │   │   └── index.js
-│   │   ├── /tests
-│   │   ├── Dockerfile
-│   │   ├── package.json
-│   │   └── README.md
-│   │
-│   └── /other-service
-│       ├── /src
-│       │   ├── /controllers
-│       │   ├── /models
-│       │   ├── /routes
-│       │   ├── /services
-│       │   ├── /utils
-│       │   └── index.js
-│       ├── /tests
-│       ├── Dockerfile
-│       ├── package.json
-│       └── README.md
+├── /src
+│   ├── /controllers      # Request handlers (emailController.js)
+│   ├── /models           # (Reserved for future use)
+│   ├── /routes           # API route definitions (emailRoutes.js)
+│   ├── /services         # Business logic (emailService.js)
+│   ├── /utils            # Utility functions (authenticate.js)
+│   ├── app.js            # (Not used, main entry is index.js)
+│   ├── config.js         # (Reserved for config)
+│   └── index.js          # Main application entry point
 │
-├── /api-gateway
-│   ├── /src
-│   │   ├── /middlewares
-│   │   ├── /routes
-│   │   ├── /services
-│   │   └── index.js
-│   ├── Dockerfile
-│   ├── package.json
-│   └── README.md
+├── /tests                # Unit/integration tests
 │
-├── /docker-compose.yml
-├── /k8s
-│   ├── /email-service-deployment.yaml
-│   ├── /user-service-deployment.yaml
-│   ├── /other-service-deployment.yaml
-│   └── /api-gateway-deployment.yaml
-│
-├── /scripts
-│   ├── setup.sh
-│   └── deploy.sh
-│
-└── README.md
+├── Dockerfile            # Docker configuration
+├── package.json          # Dependencies and scripts
+├── .env                  # Environment variables (not committed)
+└── README.md             # This file
 ```
 
-### Description of the Structure
+## Environment Variables
 
-- **/services**: This directory contains all the individual microservices.
-  - **/email-service**: Contains the Email API service.
-    - **/src**: Source code for the service.
-      - **/controllers**: Business logic for handling requests.
-      - **/models**: Data models (e.g., database schemas).
-      - **/routes**: API route definitions.
-      - **/services**: Service layer for business logic.
-      - **/utils**: Utility functions.
-      - **index.js**: Entry point for the service.
-    - **/tests**: Unit and integration tests for the service.
-    - **Dockerfile**: Docker configuration for the service.
-    - **package.json**: Node.js dependencies and scripts.
-    - **README.md**: Documentation for the service.
-  - **/user-service**: Similar structure for the User Service.
-  - **/other-service**: Placeholder for additional services.
+Create a `.env` file in the root with the following variables:
 
-- **/api-gateway**: This directory contains the API Gateway service that routes requests to the appropriate microservices.
-  - **/src**: Source code for the API Gateway.
-    - **/middlewares**: Middleware functions for request handling.
-    - **/routes**: Route definitions for the API Gateway.
-    - **/services**: Service layer for the API Gateway.
-    - **index.js**: Entry point for the API Gateway.
-  - **Dockerfile**: Docker configuration for the API Gateway.
-  - **package.json**: Node.js dependencies and scripts.
-  - **README.md**: Documentation for the API Gateway.
+```
+MONGO_URI=your_mongodb_connection_string
+PORT=3001
+JWT_SECRET=your_jwt_secret
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_password
+```
 
-- **docker-compose.yml**: Docker Compose file to define and run multi-container Docker applications.
+## Installation
 
-- **/k8s**: Kubernetes configuration files for deploying the services.
-  - Each service has its own deployment YAML file.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-- **/scripts**: Scripts for setup and deployment.
-  - **setup.sh**: Script to set up the environment.
-  - **deploy.sh**: Script to deploy the services.
+2. Set up your `.env` file as described above.
 
-- **README.md**: Documentation for the overall architecture and setup instructions.
+## Running the Service
 
-### Notes
-- This structure is flexible and can be modified based on your specific requirements, such as adding more services or changing the technology stack (e.g., using Python, Go, etc.).
-- You may also want to include additional directories for configuration files, logging, monitoring, or CI/CD pipelines as needed.
-- Ensure to include proper documentation in each service's README file to help other developers understand how to use and contribute to the services.
+- Start the service:
+  ```bash
+  npm start
+  ```
+- For development with auto-reload:
+  ```bash
+  npm run dev
+  ```
+
+- The service will run on the port specified in `.env` (default: 3001).
+
+## Docker
+
+To build and run with Docker:
+
+```bash
+docker build -t email-service .
+docker run --env-file .env -p 3001:3001 email-service
+```
+
+## API Endpoints
+
+### Health Check
+
+- **GET** `/health`
+- **Response:** `{ "status": "OK", "mongoDB": "Connected" | "Disconnected" }`
+
+### Send Email
+
+- **POST** `/api/email/send`
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>`
+- **Body:**
+  ```json
+  {
+    "to": "recipient@example.com",
+    "subject": "Subject",
+    "text": "Email body"
+  }
+  ```
+- **Response:**  
+  - `200 OK` `{ "message": "Email sent successfully" }`
+  - `401 Unauthorized` if token is missing/invalid
+  - `500 Internal Server Error` on failure
+
+## Testing
+
+- Run tests:
+  ```bash
+  npm test
+  ```
+
+## Notes
+
+- Ensure your Gmail account allows less secure app access or use an app password if 2FA is enabled.
+- MongoDB is required for the service to start, even if not used directly for email sending.
+
+## License
+
+MIT
