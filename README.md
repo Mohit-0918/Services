@@ -1,68 +1,25 @@
 ### Folder Structure
 
 ```
-/microservices-architecture
-│
-├── /services
+/services
 │   ├── /email-service
-│   │   ├── /src
-│   │   │   ├── /controllers
-│   │   │   ├── /models
-│   │   │   ├── /routes
-│   │   │   ├── /services
-│   │   │   ├── /utils
-│   │   │   ├── app.js
-│   │   │   └── config.js
-│   │   ├── /tests
-│   │   ├── Dockerfile
-│   │   ├── package.json
-│   │   └── README.md
-│   │
-│   ├── /user-service
-│   │   ├── /src
-│   │   │   ├── /controllers
-│   │   │   ├── /models
-│   │   │   ├── /routes
-│   │   │   ├── /services
-│   │   │   ├── /utils
-│   │   │   ├── app.js
-│   │   │   └── config.js
-│   │   ├── /tests
-│   │   ├── Dockerfile
-│   │   ├── package.json
-│   │   └── README.md
-│   │
-│   ├── /order-service
-│   │   ├── /src
-│   │   │   ├── /controllers
-│   │   │   ├── /models
-│   │   │   ├── /routes
-│   │   │   ├── /services
-│   │   │   ├── /utils
-│   │   │   ├── app.js
-│   │   │   └── config.js
-│   │   ├── /tests
-│   │   ├── Dockerfile
-│   │   ├── package.json
-│   │   └── README.md
-│   │
-│   └── /gateway-service
-│       ├── /src
-│       │   ├── /middlewares
-│       │   ├── /routes
-│       │   ├── app.js
-│       │   └── config.js
-│       ├── /tests
-│       ├── Dockerfile
-│       ├── package.json
-│       └── README.md
+│      ├── /src
+│      │   ├── /controllers
+│      │   ├── /models
+│      │   ├── /routes
+│      │   ├── /services
+│      │   ├── /utils
+│      │   ├── app.js
+│      │   └── config.js
+│      ├── /tests
+│      ├── Dockerfile
+│      ├── package.json
+│      └── README.md
 │
 ├── /docker-compose.yml
 ├── /k8s
 │   ├── /email-service-deployment.yaml
-│   ├── /user-service-deployment.yaml
-│   ├── /order-service-deployment.yaml
-│   └── /gateway-service-deployment.yaml
+│  
 │
 ├── /docs
 │   ├── architecture.md
