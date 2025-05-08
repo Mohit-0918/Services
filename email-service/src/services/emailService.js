@@ -55,5 +55,28 @@ exports.sendMail = async ({ Email, Fname, Sname, Pno, Msg }) => {
       </div>
     `
   });
+  // Send a thank you email to the user
+  return transporter.sendMail({
+    from: `"Moshit Sharma" <${process.env.EMAIL_USER}>`,
+    to: Email,
+    subject: "Thank You for Reaching Out",
+    text: `
+    Dear ${Fname},
+
+    Thank you for reaching out to Mohit Sharma. He shall connect with you shortly.
+
+    Please note that this is a system-generated email. Kindly do not reply to this message.
+        `,
+        html: `
+          <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <p>Dear ${Fname},</p>
+            <p>Thank you for reaching out to <strong>Moshit Sharma</strong>. He shall connect with you shortly.</p>
+            <p style="color: red;"><em>Please note: This is a system-generated email. Kindly do not reply to this message.</em></p>
+            <br/>
+            <p>Best regards,</p>
+            <p>The Team</p>
+          </div>
+        `
+  });
   
 };
