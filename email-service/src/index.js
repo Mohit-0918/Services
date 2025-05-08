@@ -25,10 +25,8 @@ app.get("/", async (req, res) => {
 });
 
 // Mount email routes
-app.use("/api/email", (req,res)=>{
-    res.status(200).json({message:"Email service is running"});
-});
-
+app.use("/api/email", emailRoutes);
+ 
 app.get("/health", async (req, res) => {
     const mongoState = mongoose.connection.readyState;
     const status = mongoState === 1 ? "Connected" : "Disconnected";
@@ -43,10 +41,6 @@ if (!process.env.MONGO_URI) {
 }
 
 if (process.env.NODE_ENV !== "test") {
-    console.log("Connecting to MongoDB...");
-    console.log(`MongoDB URI: ${process.env.MONGO_URI}`);
-    console.log(`Environment: ${process.env.NODE_ENV}`);
-    console.log(`Port: ${PORT}`);
     mongoose
         .connect(process.env.MONGO_URI, {
             useNewUrlParser: true,
