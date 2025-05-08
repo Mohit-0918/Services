@@ -30,17 +30,17 @@ exports.sendMail = async ({ Email, Fname, Sname, Pno, Msg }) => {
     },
   });
 
-  return transporter.sendMail({
+  // Send email to admin
+  await transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: process.env.EMAIL_SEND,
     subject: "New Message from Your Website",
     text: `
-  You have received a new message from ${Fname} ${Sname}.
-  
-  Phone Number: ${Pno}
-  Contact Email: ${Email}
-  Message: ${Msg}
+You have received a new message from ${Fname} ${Sname}.
 
+Phone Number: ${Pno}
+Contact Email: ${Email}
+Message: ${Msg}
     `,
     html: `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -55,28 +55,28 @@ exports.sendMail = async ({ Email, Fname, Sname, Pno, Msg }) => {
       </div>
     `
   });
-  // Send a thank you email to the user
+
+  // Send acknowledgment email to user
   return transporter.sendMail({
     from: `"Moshit Sharma" <${process.env.EMAIL_USER}>`,
     to: Email,
     subject: "Thank You for Reaching Out",
     text: `
-    Dear ${Fname},
+Dear ${Fname},
 
-    Thank you for reaching out to Mohit Sharma. He shall connect with you shortly.
+Thank you for reaching out to Moshit Sharma. He shall connect with you shortly.
 
-    Please note that this is a system-generated email. Kindly do not reply to this message.
-        `,
-        html: `
-          <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-            <p>Dear ${Fname},</p>
-            <p>Thank you for reaching out to <strong>Moshit Sharma</strong>. He shall connect with you shortly.</p>
-            <p style="color: red;"><em>Please note: This is a system-generated email. Kindly do not reply to this message.</em></p>
-            <br/>
-            <p>Best regards,</p>
-            <p>The Team</p>
-          </div>
-        `
+Please note that this is a system-generated email. Kindly do not reply to this message.
+    `,
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <p>Dear ${Fname},</p>
+        <p>Thank you for reaching out to <strong>Moshit Sharma</strong>. He shall connect with you shortly.</p>
+        <p style="color: red;"><em>Please note: This is a system-generated email. Kindly do not reply to this message.</em></p>
+        <br/>
+        <p>Best regards,</p>
+        <p>The Team</p>
+      </div>
+    `
   });
-  
 };
